@@ -7,6 +7,7 @@ import pm.springframework.petclinic.services.OwnerService;
 import pm.springframework.petclinic.services.PetTypeService;
 import pm.springframework.petclinic.services.SpecialtyService;
 import pm.springframework.petclinic.services.VetService;
+import pm.springframework.petclinic.services.VisitService;
 
 import java.time.LocalDate;
 
@@ -17,13 +18,15 @@ public class DataLoader implements CommandLineRunner {
     private final VetService vetService;
     private final PetTypeService petTypeService;
     private final SpecialtyService specialtyService;
+    private final VisitService visitService;
 
-    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SpecialtyService specialtyService) {
+    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SpecialtyService specialtyService, VisitService visitService) {
         this.ownerService = ownerService;
         this.vetService = vetService;
         this.petTypeService = petTypeService;
         this.specialtyService = specialtyService;
-     }
+        this.visitService = visitService;
+    }
 
     @Override
     public void run(String... args) throws Exception {
@@ -90,6 +93,13 @@ public class DataLoader implements CommandLineRunner {
         owner2.getPets().add(izabelPet);
 
         ownerService.save(owner2);
+
+        Visit dogVisit = new Visit();
+        dogVisit.setPet(izabelPet);
+        dogVisit.setDate(LocalDate.now());
+        dogVisit.setDescription("Sneezy Dog");
+
+        visitService.save(dogVisit);
 
         Vet vet1 = new Vet();
         vet1.setFirstName("Sam");
